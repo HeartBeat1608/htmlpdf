@@ -239,10 +239,9 @@ func (e *engine) renderListItem(b *document.BlockNode) {
 	baseline := e.y + firstLineH*0.8
 
 	if b.ListMarker == "disc" {
-		// Draw a filled circle approximated by text bullet "•"
-		e.page.SetFillColor(0, 0, 0)
-		e.page.SetFont("F1", 8)
-		e.page.DrawText(markerX, baseline, "•")
+		// Draw a simple square bullet to avoid relying on unsupported Unicode
+		// bullet glyphs in the built-in Type1 font set.
+		e.page.DrawRect(markerX+2, baseline-5, 4, 4, 0, 0, 0)
 	} else {
 		e.page.SetFillColor(0, 0, 0)
 		e.page.SetFont("F1", 10)

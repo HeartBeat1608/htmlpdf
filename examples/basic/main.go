@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -14,6 +15,7 @@ import (
 
 func main() {
 	var (
+		inputFile  = flag.String("in", "", "input HTML file")
 		outputFile = flag.String("out", "example.pdf", "output PDF file")
 		backend    = flag.String("backend", "auto", "backend to use: auto, chrome, native")
 		title      = flag.String("title", "htmlpdf Example", "PDF document title")
@@ -25,7 +27,20 @@ func main() {
 		log.Fatal(err)
 	}
 
-	html := []byte(sampleHTML(*title))
+	var html []byte
+	if *inputFile == "" || !strings.HasSuffix(*inputFile, ".html") {
+		html = sampleHTML(*title)
+	} else {
+		file, err := os.OpenFile(*inputFile, os.O_RDONLY, os.ModePerm)
+		if err != nil {
+			log.Fatalf("failed to open file: %v", err)
+		}
+
+		html, err = io.ReadAll(file)
+		if err != nil {
+			log.Fatalf("failed to read file: %v", err)
+		}
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -58,8 +73,9 @@ func parseBackend(raw string) (htmlpdf.Backend, error) {
 	}
 }
 
-func sampleHTML(title string) string {
-	return fmt.Sprintf(`<!doctype html>
+func sampleHTML(title string) []byte {
+	generatedAt := time.Now()
+	htmlF := fmt.Sprintf(`<!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -94,10 +110,16 @@ func sampleHTML(title string) string {
           <td>Generated at</td>
           <td>%s</td>
         </tr>
+        <tr>
+          <td>Generated time</td>
+          <td>%s</td>
+        </tr>
       </tbody>
     </table>
 
     <pre>go run ./examples/basic -backend=native -out=example.pdf</pre>
   </body>
-</html>`, title, title, time.Now().Format("2006-01-02 15:04:05"))
+</html>`, title, title, generatedAt.Format("2006-01-02"), generatedAt.Format("15:04:05"))
+
+	return []byte(htmlF)
 }

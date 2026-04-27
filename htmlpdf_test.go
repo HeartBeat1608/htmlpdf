@@ -233,6 +233,17 @@ func TestInvoiceHasTableStructure(t *testing.T) {
 	}
 }
 
+func TestListMarkersDoNotRenderRawUTF8Bytes(t *testing.T) {
+	html := []byte("<ul><li>alpha</li><li>beta</li></ul>")
+	data, err := htmlpdf.Generate(html, htmlpdf.Options{Backend: htmlpdf.BackendNative})
+	if err != nil {
+		t.Fatalf("list render: %v", err)
+	}
+	if bytes.Contains(data, []byte("342200242")) {
+		t.Error("list marker rendered as raw UTF-8 byte digits instead of a visible bullet shape")
+	}
+}
+
 // ---------------------------------------------------------------------------
 // Fixture: technical report
 // ---------------------------------------------------------------------------

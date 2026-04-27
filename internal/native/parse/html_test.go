@@ -114,6 +114,22 @@ func TestParagraphText(t *testing.T) {
 	}
 }
 
+func TestContainerWithBlockChildrenDoesNotFlattenDescendants(t *testing.T) {
+	doc := mustParse(t, `<div><h1>Title</h1><p>Paragraph</p></div>`)
+	if len(doc.Blocks) != 2 {
+		t.Fatalf("expected 2 top-level blocks, got %d", len(doc.Blocks))
+	}
+	if doc.Blocks[0].Kind != document.BlockHeading {
+		t.Fatalf("first block kind = %v, want heading", doc.Blocks[0].Kind)
+	}
+	if doc.Blocks[1].Kind != document.BlockParagraph {
+		t.Fatalf("second block kind = %v, want paragraph", doc.Blocks[1].Kind)
+	}
+	if strings.Contains(blockText(doc.Blocks[1]), "Title") {
+		t.Error("container paragraph incorrectly flattened descendant heading text")
+	}
+}
+
 func TestBoldInline(t *testing.T) {
 	doc := mustParse(t, `<p>normal <strong>bold</strong> normal</p>`)
 	b := findBlock(doc.Blocks, document.BlockParagraph)

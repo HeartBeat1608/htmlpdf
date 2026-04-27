@@ -197,6 +197,7 @@ func TestEscapeText(t *testing.T) {
 		{"say (hi)", `(say \(hi\))`},
 		{"back\\slash", `(back\\slash)`},
 		{"line\nnewline", `(line\nnewline)`},
+		{"dash — quote “ok”", `(dash - quote "ok")`},
 	}
 	for _, c := range cases {
 		got := escapeText(c.input)

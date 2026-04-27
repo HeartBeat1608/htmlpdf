@@ -144,6 +144,10 @@ func (p *parser) walkChildren(n *hp.Node, style document.TextStyle, depth int) {
 			tag == "main" || tag == "header" || tag == "footer":
 			flushInlines()
 			childStyle := applyElementStyle(c, style)
+			if hasBlockChildren(c) {
+				p.walkChildren(c, childStyle, depth)
+				continue
+			}
 			block := &document.BlockNode{
 				Kind:    document.BlockParagraph,
 				Inlines: p.collectInlines(c, childStyle),
@@ -151,10 +155,6 @@ func (p *parser) walkChildren(n *hp.Node, style document.TextStyle, depth int) {
 				Depth:   depth,
 			}
 			appendBlock(block)
-			// recurse into divs that contain block children
-			if hasBlockChildren(c) {
-				p.walkChildren(c, childStyle, depth)
-			}
 
 		// ---- preformatted ----
 		case tag == "pre":

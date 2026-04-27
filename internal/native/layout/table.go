@@ -104,26 +104,57 @@ func measureTable(tbl *document.BlockNode, availWidth float64) []float64 {
 // measureCellWidth returns the (minWidth, maxWidth) of a table cell's inline
 // content.  minWidth is the longest word; maxWidth is the full unwrapped line.
 func measureCellWidth(cell *document.BlockNode) (minW, maxW float64) {
+	const shortPhraseSlack = 4.0
+
+	lineW := 0.0
+	lineWords := 0
+
+	commitLine := func() {
+		if lineW > maxW {
+			maxW = lineW
+		}
+		// Keep short phrases like "Unit Price" and "Total Due" together when
+		// possible instead of sizing the column only to the longest single word.
+		if lineWords > 0 && lineWords <= 2 {
+			targetW := lineW + shortPhraseSlack
+			if targetW > minW {
+				minW = targetW
+			}
+			if targetW > maxW {
+				maxW = targetW
+			}
+		}
+		lineW = 0
+		lineWords = 0
+	}
+
 	for _, in := range cell.Inlines {
+		if in.Kind == document.InlineBreak {
+			commitLine()
+			continue
+		}
 		if in.Kind != document.InlineText {
 			continue
 		}
 		face := in.Style.Face
 		size := in.Style.Size
-
-		// maxWidth: full string width
-		w := fonts.MeasureString(face, size, in.Text)
-		if w > maxW {
-			maxW = w
-		}
+		spW := fonts.SpaceWidth(face, size)
 
 		// minWidth: widest individual word
-		for _, word := range splitWords(in.Text) {
+		for wi, word := range splitWords(in.Text) {
 			ww := fonts.MeasureString(face, size, word)
 			if ww > minW {
 				minW = ww
 			}
+			if lineWords > 0 || wi > 0 {
+				lineW += spW
+			}
+			lineW += ww
+			lineWords++
 		}
+	}
+	if lineWords > 0 {
+		commitLine()
 	}
 	return
 }
