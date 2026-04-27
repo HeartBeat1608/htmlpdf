@@ -27,19 +27,22 @@
 // Inline elements: span, strong, b, em, i, code, a, br, img (alt text only).
 //
 // CSS (inline style= only): font-size, font-weight, font-style, font-family,
-// color, text-align. All other properties are silently ignored.
+// color, text-align, background-color. All other properties are silently
+// ignored.
+//
+// Until v1.0.0, exported APIs may still evolve as the package settles into
+// open-source development.
 package htmlpdf
 
 import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 
-	"github.com/HeartBeat1608/htmlpdf/chrome"
-	"github.com/HeartBeat1608/htmlpdf/document"
-	"github.com/HeartBeat1608/htmlpdf/native/layout"
-	"github.com/HeartBeat1608/htmlpdf/native/parse"
+	"github.com/HeartBeat1608/htmlpdf/internal/chrome"
+	"github.com/HeartBeat1608/htmlpdf/internal/document"
+	"github.com/HeartBeat1608/htmlpdf/internal/native/layout"
+	"github.com/HeartBeat1608/htmlpdf/internal/native/parse"
 )
 
 // Generate converts html to a PDF and returns the raw bytes.
@@ -70,7 +73,6 @@ func GenerateContext(ctx context.Context, html []byte, opts Options) ([]byte, er
 		data, err := renderChrome(ctx, html, opts)
 		if err != nil {
 			// Only fall back on ErrNoBrowser — other Chrome errors surface as-is.
-			log.Printf("error in GenerateContent(...): %v", err)
 			if errors.Is(err, ErrNoBrowser) {
 				return renderNative(html, opts)
 			}
@@ -95,7 +97,10 @@ func renderChrome(ctx context.Context, html []byte, opts Options) ([]byte, error
 		return nil, ErrNoBrowser
 	}
 
-	r := &chrome.Renderer{BinaryPath: bin}
+	r := &chrome.Renderer{
+		BinaryPath:     bin,
+		DisableSandbox: opts.ChromeDisableSandbox,
+	}
 	data, err := r.Render(ctx, html)
 	if err != nil {
 		return nil, fmt.Errorf("htmlpdf chrome: %w", err)

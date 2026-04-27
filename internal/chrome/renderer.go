@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"path/filepath"
-	"time"
 )
 
 // FindBinary returns the path of the first usable browser binary.
@@ -38,7 +36,8 @@ func FindBinary(override string) (string, error) {
 
 // Renderer renders HTML to PDF using headless Chrome.
 type Renderer struct {
-	BinaryPath string // resolved browser binary
+	BinaryPath     string // resolved browser binary
+	DisableSandbox bool   // adds --no-sandbox when the host requires it
 }
 
 // Render serves html on a local HTTP port, launches Chrome with
@@ -54,30 +53,42 @@ func (r *Renderer) Render(ctx context.Context, html []byte) ([]byte, error) {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		w.Write(html) //nolint:errcheck
+		_, _ = w.Write(html)
 	})
 	srv := &http.Server{Handler: mux}
 
-	go srv.Serve(ln) //nolint:errcheck
+	go func() {
+		_ = srv.Serve(ln)
+	}()
+	defer ln.Close()
 	defer srv.Close()
 
 	url := fmt.Sprintf("http://%s/", ln.Addr())
 
 	// 2. Write PDF to a temp file (Chrome requires a file path, not stdout).
-	outFile := filepath.Join(os.TempDir(), fmt.Sprintf("htmlpdf-%d.pdf", time.Now().UnixNano()))
+	tmpFile, err := os.CreateTemp("", "htmlpdf-*.pdf")
+	if err != nil {
+		return nil, fmt.Errorf("chrome: create temp file: %w", err)
+	}
+	outFile := tmpFile.Name()
+	if err := tmpFile.Close(); err != nil {
+		return nil, fmt.Errorf("chrome: close temp file: %w", err)
+	}
 	defer os.Remove(outFile)
 
 	// 3. Build the Chrome argument list.
 	args := []string{
 		"--headless",
 		"--disable-gpu",
-		"--no-sandbox",
 		"--disable-software-rasterizer",
 		"--disable-dev-shm-usage",
 		"--run-all-compositor-stages-before-draw",
 		"--print-to-pdf-no-header",
 		"--print-to-pdf=" + outFile,
 		url,
+	}
+	if r.DisableSandbox {
+		args = append(args[:2], append([]string{"--no-sandbox"}, args[2:]...)...)
 	}
 
 	cmd := exec.CommandContext(ctx, r.BinaryPath, args...)

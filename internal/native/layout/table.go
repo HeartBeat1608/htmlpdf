@@ -1,8 +1,8 @@
 package layout
 
 import (
-	"github.com/HeartBeat1608/htmlpdf/document"
-	"github.com/HeartBeat1608/htmlpdf/native/fonts"
+	"github.com/HeartBeat1608/htmlpdf/internal/document"
+	"github.com/HeartBeat1608/htmlpdf/internal/native/fonts"
 )
 
 // tableColumn describes a single measured column.

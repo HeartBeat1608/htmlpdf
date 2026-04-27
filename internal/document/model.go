@@ -9,10 +9,10 @@
 //
 // This is intentionally simpler than a full CSS box model. The native renderer
 // handles a well-defined subset of HTML; anything it cannot represent faithfully
-// is approximated or skipped with an ErrUnsupported annotation on the node.
+// is approximated or skipped.
 package document
 
-import "github.com/HeartBeat1608/htmlpdf/native/fonts"
+import "github.com/HeartBeat1608/htmlpdf/internal/native/fonts"
 
 // ---------------------------------------------------------------------------
 // Text style

@@ -25,8 +25,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/HeartBeat1608/htmlpdf/document"
-	"github.com/HeartBeat1608/htmlpdf/native/fonts"
+	"github.com/HeartBeat1608/htmlpdf/internal/document"
+	"github.com/HeartBeat1608/htmlpdf/internal/native/fonts"
 	hp "golang.org/x/net/html"
 )
 

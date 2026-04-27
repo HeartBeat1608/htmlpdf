@@ -6,10 +6,6 @@ import "errors"
 // binary can be located on the system PATH or at Options.ChromePath.
 var ErrNoBrowser = errors.New("htmlpdf: no supported browser found (install chromium or google-chrome)")
 
-// ErrUnsupportedFeature is returned when the native backend encounters HTML or
-// CSS that it explicitly does not support (e.g. position:absolute, SVG).
-var ErrUnsupportedFeature = errors.New("htmlpdf: unsupported HTML/CSS feature in native renderer")
-
 // Backend selects which rendering engine to use.
 type Backend int
 
@@ -46,6 +42,12 @@ type Options struct {
 	// ChromePath overrides the browser binary used by BackendChrome.
 	// When empty, the engine searches the system PATH.
 	ChromePath string
+
+	// ChromeDisableSandbox adds Chrome's --no-sandbox flag.
+	//
+	// Leave this false unless you are running in a restricted container or CI
+	// environment where the browser sandbox cannot start normally.
+	ChromeDisableSandbox bool
 
 	// PageSize sets the paper size. Default: PageA4.
 	PageSize PageSize

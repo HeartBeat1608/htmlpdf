@@ -14,9 +14,9 @@ package layout
 import (
 	"strings"
 
-	"github.com/HeartBeat1608/htmlpdf/document"
-	"github.com/HeartBeat1608/htmlpdf/native/fonts"
-	"github.com/HeartBeat1608/htmlpdf/native/pdf"
+	"github.com/HeartBeat1608/htmlpdf/internal/document"
+	"github.com/HeartBeat1608/htmlpdf/internal/native/fonts"
+	"github.com/HeartBeat1608/htmlpdf/internal/native/pdf"
 )
 
 // Render lays out doc and returns the PDF bytes.
