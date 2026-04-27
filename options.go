@@ -10,7 +10,8 @@ var ErrNoBrowser = errors.New("htmlpdf: no supported browser found (install chro
 type Backend int
 
 const (
-	// BackendAuto tries Chrome first, falls back to Native if not available.
+	// BackendAuto tries Chrome first, falls back to Native when Chrome is not
+	// available or cannot render in the current environment.
 	BackendAuto Backend = iota
 	// BackendChrome requires headless Chrome/Chromium. Returns ErrNoBrowser if absent.
 	BackendChrome

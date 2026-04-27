@@ -7,7 +7,7 @@ It ships with two rendering backends:
 - `BackendChrome` uses headless Chrome or Chromium for high-fidelity HTML/CSS output.
 - `BackendNative` uses a pure-Go renderer for document-style HTML without external binaries.
 
-By default, `BackendAuto` tries Chrome first and falls back to the native renderer when no supported browser is available.
+By default, `BackendAuto` tries Chrome first and falls back to the native renderer when no supported browser is available or Chrome cannot render successfully in the current environment.
 
 ## Status
 

@@ -16,8 +16,9 @@
 //     Full HTML5/CSS3 fidelity. Requires a browser binary on the host.
 //
 // With BackendAuto (the default), Chrome is tried first and Native is used
-// as the fallback if no browser is found. This gives you the best output
-// when Chrome is available and a safe fallback everywhere else.
+// as the fallback when Chrome is unavailable or cannot render successfully.
+// This gives you the best output when Chrome is usable and a safe fallback
+// everywhere else.
 //
 // # Supported HTML (native backend)
 //
@@ -36,7 +37,6 @@ package htmlpdf
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/HeartBeat1608/htmlpdf/internal/chrome"
@@ -72,11 +72,10 @@ func GenerateContext(ctx context.Context, html []byte, opts Options) ([]byte, er
 	case BackendAuto:
 		data, err := renderChrome(ctx, html, opts)
 		if err != nil {
-			// Only fall back on ErrNoBrowser — other Chrome errors surface as-is.
-			if errors.Is(err, ErrNoBrowser) {
-				return renderNative(html, opts)
-			}
-			return nil, err
+			// BackendAuto is a best-effort choice: if Chrome is not available or
+			// cannot render in the current environment, fall back to the pure-Go
+			// renderer instead of surfacing environment-specific Chrome failures.
+			return renderNative(html, opts)
 		}
 		return data, nil
 	default:

@@ -71,6 +71,27 @@ func validatePDFStructure(t *testing.T, data []byte, label string) {
 	}
 }
 
+// validatePDFEnvelope checks portable PDF structure without assuming any
+// backend-specific content stream representation.
+func validatePDFEnvelope(t *testing.T, data []byte, label string) {
+	t.Helper()
+	checks := map[string]bool{
+		"header":    bytes.HasPrefix(data, []byte("%PDF-")),
+		"xref":      bytes.Contains(data, []byte("\nxref\n")),
+		"trailer":   bytes.Contains(data, []byte("\ntrailer\n")),
+		"startxref": bytes.Contains(data, []byte("\nstartxref\n")),
+		"EOF":       bytes.Contains(data, []byte("%%EOF")),
+		"Catalog":   bytes.Contains(data, []byte("/Type /Catalog")),
+		"Pages":     bytes.Contains(data, []byte("/Type /Pages")),
+		"Page":      bytes.Contains(data, []byte("/Type /Page")),
+	}
+	for name, ok := range checks {
+		if !ok {
+			t.Errorf("[%s] PDF envelope check failed: %s", label, name)
+		}
+	}
+}
+
 // ---------------------------------------------------------------------------
 // Options tests
 // ---------------------------------------------------------------------------
@@ -81,7 +102,7 @@ func TestOptionsDefaults(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Generate with zero Options: %v", err)
 	}
-	validatePDFStructure(t, data, "defaults")
+	validatePDFEnvelope(t, data, "defaults")
 }
 
 func TestOptionsNativeBackendExplicit(t *testing.T) {
