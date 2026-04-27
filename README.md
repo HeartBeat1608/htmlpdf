@@ -50,6 +50,24 @@ func main() {
 }
 ```
 
+## Example Application
+
+If you want something runnable right away, there is a small starter app in [examples/basic](/Users/thelamedev/profession/htmlpdf/examples/basic).
+
+Run it with:
+
+```bash
+go run ./examples/basic
+```
+
+That generates `example.pdf` in your current directory.
+
+You can also choose a backend and output path:
+
+```bash
+go run ./examples/basic -backend=native -out=invoice.pdf -title="My First PDF"
+```
+
 ## Backend Notes
 
 ### Chrome backend
