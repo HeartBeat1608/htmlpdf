@@ -117,6 +117,10 @@ func TestWriterTextContent(t *testing.T) {
 	if !bytes.Contains(data, []byte("Tf")) {
 		t.Error("Tf (font) operator not found")
 	}
+	// Text matrix operator must be used for text placement
+	if !bytes.Contains(data, []byte("Tm")) {
+		t.Error("Tm (text matrix) operator not found")
+	}
 	// Text-show operator must be used for visible text rendering
 	if !bytes.Contains(data, []byte("Tj")) {
 		t.Error("Tj (show text) operator not found")

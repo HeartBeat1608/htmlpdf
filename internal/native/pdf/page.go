@@ -79,12 +79,11 @@ func (p *Page) SetFillColor(r, g, b float64) {
 // y is the baseline position in top-left document coordinates.
 func (p *Page) DrawText(x, y float64, text string) {
 	p.ensureTextMode()
-	p.op("1 0 0 1", fmt.Sprintf("%.4f %.4f", x, p.toY(y)), opConcat)
-	// matrix reset invalidates Td positioning; force re-set tracking
-	p.curFont = ""
+	p.op(
+		fmt.Sprintf("1 0 0 1 %.4f %.4f", x, p.toY(y)),
+		opSetTextMat,
+	)
 	p.op(escapeText(text), opShowText)
-	// reset matrix back to indentity so subsequent Td calls work from page origin
-	p.op("1 0 0 1 0 0", opConcat)
 }
 
 // DrawRect draws a filled rectangle in top-left document coordinates.

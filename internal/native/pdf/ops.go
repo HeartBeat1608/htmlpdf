@@ -10,6 +10,7 @@ const (
 	opBeginText  = "BT"
 	opEndText    = "ET"
 	opMoveText   = "Td"
+	opSetTextMat = "Tm"
 	opSetFont    = "Tf"
 	opShowText   = "Tj"
 	opSetLeading = "TL"

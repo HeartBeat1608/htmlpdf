@@ -1,0 +1,277 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+2 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold /Encoding /WinAnsiEncoding >>
+endobj
+8 0 obj
+<< /Length 3833 >>
+stream
+BT
+/F2 18.00 Tf
+1 0 0 1 72.0000 752.6100 Tm
+(htmlpdf) Tj
+1 0 0 1 142.9920 752.6100 Tm
+(Example) Tj
+/F1 12.00 Tf
+1 0 0 1 72.0000 726.7700 Tm
+(This) Tj
+1 0 0 1 98.0040 726.7700 Tm
+(PDF) Tj
+1 0 0 1 125.3400 726.7700 Tm
+(was) Tj
+1 0 0 1 150.0120 726.7700 Tm
+(generated) Tj
+1 0 0 1 207.3840 726.7700 Tm
+(from) Tj
+1 0 0 1 234.7200 726.7700 Tm
+(a) Tj
+1 0 0 1 244.7280 726.7700 Tm
+(runnable) Tj
+1 0 0 1 294.7560 726.7700 Tm
+(example) Tj
+1 0 0 1 343.4400 726.7700 Tm
+(application.) Tj
+1 0 0 1 72.0000 704.3700 Tm
+(Use) Tj
+1 0 0 1 96.6720 704.3700 Tm
+(this) Tj
+1 0 0 1 118.6800 704.3700 Tm
+(as) Tj
+1 0 0 1 134.6880 704.3700 Tm
+(a) Tj
+1 0 0 1 144.6960 704.3700 Tm
+(starting) Tj
+1 0 0 1 187.3800 704.3700 Tm
+(point) Tj
+1 0 0 1 216.7320 704.3700 Tm
+(for) Tj
+1 0 0 1 234.0720 704.3700 Tm
+(your) Tj
+1 0 0 1 260.7480 704.3700 Tm
+(own) Tj
+1 0 0 1 286.0920 704.3700 Tm
+(HTML) Tj
+1 0 0 1 322.0920 704.3700 Tm
+(templates,) Tj
+1 0 0 1 380.7840 704.3700 Tm
+(reports,) Tj
+1 0 0 1 424.8000 704.3700 Tm
+(or) Tj
+1 0 0 1 438.8040 704.3700 Tm
+(invoices.) Tj
+/F2 13.50 Tf
+1 0 0 1 72.0000 676.5300 Tm
+(Highlights) Tj
+/F1 8.00 Tf
+1 0 0 1 76.0000 655.7700 Tm
+(342200242) Tj
+/F1 12.00 Tf
+1 0 0 1 92.0000 655.7700 Tm
+(Works) Tj
+1 0 0 1 129.3320 655.7700 Tm
+(with) Tj
+/F2 12.00 Tf
+1 0 0 1 154.0040 655.7700 Tm
+(BackendAuto) Tj
+/F1 12.00 Tf
+1 0 0 1 234.6800 655.7700 Tm
+(,) Tj
+/F2 12.00 Tf
+1 0 0 1 241.3520 655.7700 Tm
+(BackendChrome) Tj
+/F1 12.00 Tf
+1 0 0 1 340.0400 655.7700 Tm
+(,) Tj
+1 0 0 1 346.7120 655.7700 Tm
+(or) Tj
+/F2 12.00 Tf
+1 0 0 1 360.7160 655.7700 Tm
+(BackendNative) Tj
+/F1 12.00 Tf
+1 0 0 1 450.0800 655.7700 Tm
+(.) Tj
+/F1 8.00 Tf
+1 0 0 1 76.0000 639.3700 Tm
+(342200242) Tj
+/F1 12.00 Tf
+1 0 0 1 92.0000 639.3700 Tm
+(Writes) Tj
+1 0 0 1 129.3320 639.3700 Tm
+(the) Tj
+1 0 0 1 149.3480 639.3700 Tm
+(generated) Tj
+1 0 0 1 206.7200 639.3700 Tm
+(PDF) Tj
+1 0 0 1 234.0560 639.3700 Tm
+(to) Tj
+1 0 0 1 247.4000 639.3700 Tm
+(a) Tj
+1 0 0 1 257.4080 639.3700 Tm
+(file.) Tj
+/F1 8.00 Tf
+1 0 0 1 76.0000 622.9700 Tm
+(342200242) Tj
+/F1 12.00 Tf
+1 0 0 1 92.0000 622.9700 Tm
+(Uses) Tj
+1 0 0 1 122.6720 622.9700 Tm
+(a) Tj
+1 0 0 1 132.6800 622.9700 Tm
+(context) Tj
+1 0 0 1 174.7040 622.9700 Tm
+(timeout) Tj
+1 0 0 1 217.3880 622.9700 Tm
+(to) Tj
+1 0 0 1 230.7320 622.9700 Tm
+(keep) Tj
+1 0 0 1 260.0840 622.9700 Tm
+(rendering) Tj
+1 0 0 1 314.1080 622.9700 Tm
+(bounded.) Tj
+/F2 13.50 Tf
+1 0 0 1 72.0000 597.1300 Tm
+(Example) Tj
+1 0 0 1 131.2785 597.1300 Tm
+(Table) Tj
+ET
+0.9000 0.9000 0.9200 rg
+72.0000 551.8900 451.2800 28.0000 re
+f
+0.7500 0.7500 0.7500 RG
+0.25 w
+72.0000 579.8900 m
+523.2800 579.8900 l
+S
+0.0000 0.0000 0.0000 rg
+BT
+/F2 12.00 Tf
+1 0 0 1 78.0000 564.3700 Tm
+(Item) Tj
+ET
+0.7500 0.7500 0.7500 RG
+0.25 w
+160.6920 579.8900 m
+160.6920 551.8900 l
+S
+BT
+1 0 0 1 166.6920 564.3700 Tm
+(Value) Tj
+ET
+0.7500 0.7500 0.7500 RG
+0.25 w
+72.0000 551.8900 m
+523.2800 551.8900 l
+S
+0.7500 0.7500 0.7500 RG
+0.25 w
+72.0000 551.8900 m
+523.2800 551.8900 l
+S
+BT
+/F1 12.00 Tf
+1 0 0 1 78.0000 536.3700 Tm
+(Document) Tj
+1 0 0 1 136.0200 536.3700 Tm
+(title) Tj
+ET
+0.7500 0.7500 0.7500 RG
+0.25 w
+160.6920 551.8900 m
+160.6920 523.8900 l
+S
+BT
+1 0 0 1 166.6920 536.3700 Tm
+(htmlpdf) Tj
+1 0 0 1 209.3760 536.3700 Tm
+(Example) Tj
+ET
+0.7500 0.7500 0.7500 RG
+0.25 w
+72.0000 523.8900 m
+523.2800 523.8900 l
+S
+0.7500 0.7500 0.7500 RG
+0.25 w
+72.0000 523.8900 m
+523.2800 523.8900 l
+S
+BT
+1 0 0 1 78.0000 508.3700 Tm
+(Generated) Tj
+1 0 0 1 138.0360 508.3700 Tm
+(at) Tj
+ET
+0.7500 0.7500 0.7500 RG
+0.25 w
+160.6920 523.8900 m
+160.6920 495.8900 l
+S
+BT
+1 0 0 1 166.6920 508.3700 Tm
+(2026-04-27) Tj
+1 0 0 1 166.6920 493.9700 Tm
+(17:34:26) Tj
+ET
+0.7500 0.7500 0.7500 RG
+0.25 w
+72.0000 495.8900 m
+523.2800 495.8900 l
+S
+0.9500 0.9500 0.9500 rg
+72.0000 459.8900 451.2800 24.0000 re
+f
+0.1000 0.1000 0.1000 rg
+BT
+/F6 10.80 Tf
+1 0 0 1 76.0000 468.2900 Tm
+(go run ./examples/basic -backend=native -out=example.pdf) Tj
+ET
+
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 10 0 R /MediaBox [0 0 595.28 841.89] /Contents 8 0 R /Resources << /Font << /F1 1 0 R/F2 2 0 R/F3 3 0 R/F4 4 0 R/F5 5 0 R/F6 6 0 R/F7 7 0 R >> >> >>
+endobj
+10 0 obj
+<< /Type /Pages /Kids [9 0 R] /Count 1 >>
+endobj
+11 0 obj
+<< /Type /Catalog /Pages 10 0 R >>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000015 00000 n 
+0000000112 00000 n 
+0000000214 00000 n 
+0000000319 00000 n 
+0000000418 00000 n 
+0000000516 00000 n 
+0000000611 00000 n 
+0000000711 00000 n 
+0000004596 00000 n 
+0000004783 00000 n 
+0000004841 00000 n 
+trailer
+<< /Size 12 /Root 11 0 R >>
+startxref
+4892
+%%EOF
