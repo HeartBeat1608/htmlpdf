@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>System Design Review: Distributed Cache Layer</title>
+</head>
+
+<body>
+
+    <h1>System Design Review</h1>
+    <h2>Distributed Cache Layer — Q2 2026</h2>
+
+    <p style="color:#555; font-size:10pt;">Prepared by: Platform Engineering · Reviewed by: Architecture Board · Status:
+        <strong>Draft</strong>
+    </p>
+
+    <hr>
+
+    <h2>1. Executive Summary</h2>
+    <p>
+        This document reviews the proposed architecture for a distributed cache layer
+        to be introduced between the application tier and the primary PostgreSQL cluster.
+        The primary goals are to reduce database read load by 70%, decrease p99 read
+        latency from 180ms to under 20ms, and provide a horizontally scalable read path
+        for the product catalogue and user session services.
+    </p>
+
+    <blockquote>
+        <p>Cache invalidation and naming things are the two hardest problems in computer science.
+            The architecture below addresses the former with a write-through strategy and explicit TTL
+            discipline; the latter remains, as always, the team's problem.</p>
+    </blockquote>
+
+    <h2>2. Current State</h2>
+    <p>
+        The existing architecture routes all read traffic directly to the primary database
+        replica set. Under peak load (08:00–10:00 and 17:00–19:00 PST), the replica
+        cluster sustains approximately 42,000 queries per second, of which profiling
+        shows <strong>68% are identical repeated lookups</strong> against four hot tables:
+        <code>products</code>, <code>categories</code>, <code>user_sessions</code>, and <code>feature_flags</code>.
+    </p>
+
+    <h3>2.1 Observed Failure Modes</h3>
+    <ul>
+        <li>Read replica lag exceeds 2 seconds during peak batch import jobs, causing stale reads in the product search
+            service</li>
+        <li>Connection pool exhaustion on the catalogue service (max_connections=500 reached at ~38k QPS)</li>
+        <li>Cold-start latency spike of 800ms when deploying new catalogue service instances — each instance primes its
+            local LRU independently</li>
+    </ul>
+
+    <h2>3. Proposed Architecture</h2>
+    <p>
+        The proposed solution introduces a two-tier cache using <strong>Redis Cluster 7.2</strong>
+        as the primary shared cache and an in-process LRU (bounded at 256MB per instance)
+        as the L1 tier. The write path remains synchronous to PostgreSQL; cache population
+        uses a <em>write-through</em> strategy on mutation and a <em>read-through</em> fallback
+        on cache miss.
+    </p>
+
+    <h3>3.1 Key Design Decisions</h3>
+    <ol>
+        <li><strong>Write-through on all mutations</strong> — eliminates the stale-read window present in lazy
+            invalidation approaches. The additional write latency (estimated +4ms p50) is acceptable given the read
+            improvement.</li>
+        <li><strong>TTL of 300s for product/category data</strong> — product data changes infrequently; a 5-minute TTL
+            provides a safety net against cache poisoning without meaningful staleness risk.</li>
+        <li><strong>No TTL for feature flags</strong> — flags are explicitly invalidated on write via a pub/sub channel.
+            Allowing stale flags to persist would create inconsistent feature rollout behaviour.</li>
+        <li><strong>Session data: TTL mirrors session expiry</strong> — cache TTL is set equal to the session token
+            expiry time, so cache and database age out together.</li>
+    </ol>
+
+    <h2>4. Implementation Notes</h2>
+
+    <h3>4.1 Cache Key Schema</h3>
+    <p>All cache keys follow a namespaced hierarchical format to allow targeted invalidation:</p>
+    <pre>
+{service}:{entity}:{id}[:{variant}]
+
+Examples:
+  catalogue:product:48291
+  catalogue:category:112:tree
+  sessions:user:9938821
+  flags:global:dark_mode_rollout
+</pre>
+
+    <h3>4.2 Go Client Wrapper</h3>
+    <pre>
+type CacheClient struct {
+    l1  *lru.Cache        // in-process, 256MB cap
+    l2  *redis.ClusterClient
+    ttl map[string]time.Duration
+}
+
+func (c *CacheClient) Get(ctx context.Context, key string) ([]byte, error) {
+    if v, ok := c.l1.Get(key); ok {
+        return v.([]byte), nil
+    }
+    v, err := c.l2.Get(ctx, key).Bytes()
+    if err == nil {
+        c.l1.Add(key, v)
+    }
+    return v, err
+}
+</pre>
+
+    <h2>5. Risk Assessment</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Risk</th>
+                <th>Likelihood</th>
+                <th>Impact</th>
+                <th>Mitigation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Cache stampede on cold start</td>
+                <td>Medium</td>
+                <td>High</td>
+                <td>Probabilistic early expiration (PER) + request coalescing via singleflight</td>
+            </tr>
+            <tr>
+                <td>Redis cluster partition</td>
+                <td>Low</td>
+                <td>High</td>
+                <td>Circuit breaker falls through to database; degraded but functional</td>
+            </tr>
+            <tr>
+                <td>Memory pressure on L1</td>
+                <td>Medium</td>
+                <td>Low</td>
+                <td>LRU eviction bounded at 256MB; monitor with runtime/metrics</td>
+            </tr>
+            <tr>
+                <td>Stale data after failed write-through</td>
+                <td>Low</td>
+                <td>Medium</td>
+                <td>Transactional outbox pattern ensures eventual cache consistency</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>6. Acceptance Criteria</h2>
+    <ul>
+        <li>Cache hit rate ≥ 85% within 30 minutes of warm-up under production load</li>
+        <li>p99 read latency for cached entities ≤ 20ms (measured at the service boundary)</li>
+        <li>Zero increase in error rate during Redis cluster failover (circuit breaker must activate within 500ms)</li>
+        <li>No stale reads persisting beyond max(TTL, explicit invalidation) + 1s</li>
+    </ul>
+
+    <hr>
+
+    <p style="color:#888; font-size:10pt;">
+        Document version 0.3 · Last updated 14 April 2026 · Platform Engineering, Acme Software Ltd
+    </p>
+
+</body>
+
+</html>

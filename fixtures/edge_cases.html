@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edge Cases</title>
+</head>
+
+<body>
+
+    <h1>Edge Case Coverage</h1>
+
+    <h2>1. Empty Elements</h2>
+    <p></p>
+    <div></div>
+    <ul></ul>
+    <p>Paragraph after empty elements — should render without gaps or crashes.</p>
+
+    <h2>2. Unicode Content</h2>
+    <p>Latin extended: café, naïve, résumé, Ångström, Ñoño</p>
+    <p>Punctuation: "smart quotes", em—dash, ellipsis…, bullet •</p>
+    <p>Currency: £ € ¥ ₹ ₩</p>
+    <p>Accented capitals: ÀÁÂÃÄÅ ÈÉÊË ÌÍÎÏ ÒÓÔÕÖ ÙÚÛÜ</p>
+
+    <h2>3. Long Unbreakable Words</h2>
+    <p>The following word is longer than the column width and must not cause a crash or infinite loop:
+        pneumonoultramicroscopicsilicovolcanoconiosis is the longest word in a major English dictionary.</p>
+    <p>URL-like string:
+        https://this-is-a-very-long-url-that-should-not-break-the-layout.example.com/path/to/resource?query=value&amp;other=thing
+    </p>
+
+    <h2>4. Deeply Nested Lists</h2>
+    <ul>
+        <li>Level 1 — first item
+            <ul>
+                <li>Level 2 — nested item A</li>
+                <li>Level 2 — nested item B
+                    <ul>
+                        <li>Level 3 — deeply nested</li>
+                        <li>Level 3 — another deep item</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>Level 1 — second item</li>
+    </ul>
+
+    <h2>5. Malformed and Unknown CSS</h2>
+    <p style="color: hotpink; font-size: 12pt; position: absolute; top: 0; display: flex; unknown-property: value;">
+        This paragraph has invalid/unsupported CSS. The renderer should apply what it understands
+        (font-size, colour) and silently ignore the rest without crashing.
+    </p>
+    <p style="font-size: 200%; font-weight: 900; letter-spacing: 4px; text-transform: uppercase;">
+        Font-size as percentage and unsupported properties — should use fallback size gracefully.
+    </p>
+
+    <h2>6. Mixed Inline Styles</h2>
+    <p>
+        Normal text followed by
+        <strong>bold</strong>,
+        <em>italic</em>,
+        <strong><em>bold-italic</em></strong>,
+        <code>monospace</code>,
+        <a href="#">a link in blue</a>,
+        then back to normal.
+        This entire run should wrap correctly at the column boundary without style bleed.
+    </p>
+
+    <h2>7. Whitespace Handling</h2>
+    <p> Leading and trailing spaces should be collapsed. </p>
+    <p>Line
+        breaks
+        inside
+        a
+        paragraph
+        tag
+        should
+        become
+        spaces.</p>
+
+    <h2>8. Table Edge Cases</h2>
+    <table>
+        <tr>
+            <th>Single column table</th>
+        </tr>
+        <tr>
+            <td>row 1</td>
+        </tr>
+        <tr>
+            <td>row 2</td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <td>Very short</td>
+            <td>This cell contains a much longer piece of text that should cause the column sizing algorithm to allocate
+                proportionally more width to this column than to the short one on the left</td>
+            <td>Med</td>
+        </tr>
+    </table>
+
+    <h2>9. Ignored Elements</h2>
+    <script>document.write("this must not appear")</script>
+    <style>
+        .secret {
+            content: "this must not appear";
+        }
+    </style>
+    <noscript>Fallback text that should be ignored.</noscript>
+    <p>Only this paragraph should appear in section 9.</p>
+
+    <h2>10. Blockquote Nesting</h2>
+    <blockquote>
+        <p>First level quote — someone said something interesting.</p>
+        <blockquote>
+            <p>Second level — someone quoting the first person.</p>
+        </blockquote>
+        <p>Back to the first level.</p>
+    </blockquote>
+
+    <h2>11. Pre with Special Characters</h2>
+    <pre>
+func escape(s string) string {
+    s = strings.ReplaceAll(s, "&", "&amp;")
+    s = strings.ReplaceAll(s, "<", "&lt;")
+    s = strings.ReplaceAll(s, ">", "&gt;")
+    return s  // handles (parens) and "quotes" too
+}
+</pre>
+
+    <h2>12. Page Overflow</h2>
+    <p>The following block of repeated text is designed to push content past the first page boundary
+        and verify that pagination works without content being clipped or lost.</p>
+    <p>Alpha: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Beta: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Gamma: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Delta: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Epsilon: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Zeta: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Eta: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Theta: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Iota: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Kappa: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Lambda: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Mu: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Nu: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Xi: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Omicron: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Pi: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Rho: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Sigma: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Tau: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Upsilon: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Phi: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Chi: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Psi: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+    <p>Omega: The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.</p>
+
+</body>
+
+</html>
