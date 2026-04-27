@@ -11,7 +11,7 @@ const (
 	opEndText    = "ET"
 	opMoveText   = "Td"
 	opSetFont    = "Tf"
-	opShowText   = "TL"
+	opShowText   = "Tj"
 	opSetLeading = "TL"
 	opNextLine   = "T*"
 	opSetColor   = "rg"
